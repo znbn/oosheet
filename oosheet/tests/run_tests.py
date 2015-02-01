@@ -106,29 +106,29 @@ def run_tests(event = None):
         clear()
         if stop_on_error:
             test.__call__()
-            print 'OK'
+            print ('OK')
         else:
             try:
                 test.__call__()
                 if event:
                     S('Tests.c%d' % (i+10)).string = 'OK'
                 else:
-                    print 'OK'
+                    print ('OK')
                 ok += 1
-            except Exception, e:
+            except Exception as e:
                 errors += 1
                 if event:
                     S('Tests.d%d' % (i+10)).string = e
                 else:
-                    print '%s: %s' % (type(e).__name__, e)
+                    print ('%s: %s' % (type(e).__name__, e))
 
     if event:
         S('Tests.a1').focus()
     else:
         if not errors:
-            print "Passed %d of %d tests" % (ok, ok)
+            print ("Passed %d of %d tests" % (ok, ok))
         else:
-            print "Passed %d of %d tests (%d errors)" % (ok, ok+errors, errors)
+            print ("Passed %d of %d tests (%d errors)" % (ok, ok+errors, errors))
 
     return ok
             
