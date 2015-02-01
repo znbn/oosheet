@@ -171,11 +171,11 @@ class OODoc(object):
         parentWin = self.model.CurrentController.Frame.ContainerWindow
 
         aDescriptor = WindowDescriptor()
-	aDescriptor.Type = MODALTOP
-	aDescriptor.WindowServiceName = 'messbox'
-	aDescriptor.ParentIndex = -1
-	aDescriptor.Parent = parentWin
-	aDescriptor.WindowAttributes = OK
+        aDescriptor.Type = MODALTOP
+        aDescriptor.WindowServiceName = 'messbox'
+        aDescriptor.ParentIndex = -1
+        aDescriptor.Parent = parentWin
+        aDescriptor.WindowAttributes = OK
 
         tk = parentWin.getToolkit()
         box = tk.createWindow(aDescriptor)
