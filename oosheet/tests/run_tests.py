@@ -62,7 +62,7 @@ class OOCalcLauncher(object):
     def pid(self):
         sub = subprocess.Popen('ps aux'.split(), stdout=subprocess.PIPE)
         sub.wait()
-        processes = [ line for line in sub.stdout if 'soffice' in line ]
+        processes = [ line for line in sub.stdout if 'soffice' in line.decode('utf-8') ]
         try:
             return int(processes[0].split()[1])
         except IndexError:

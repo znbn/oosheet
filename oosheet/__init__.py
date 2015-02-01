@@ -971,6 +971,7 @@ class OOPacker():
         """        
         manifest = []
         for line in self.doc.open('META-INF/manifest.xml'):
+            line = line.decode('utf-8')
             if '</manifest:manifest>' in line:
                 manifest.append(' <manifest:file-entry manifest:media-type="application/binary" manifest:full-path="%s"/>' % path)
             elif ('full-path:"%s"' % path) in line:
