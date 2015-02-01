@@ -73,7 +73,7 @@ def test_date_only_sets_format_if_not_already_in_date_format():
     S().sheet.getCellRangeByName('Sheet1.A1').NumberFormat = 30
     S().sheet.getCellRangeByName('Sheet1.A2').NumberFormat = 38
 
-    S('a1:a3').date = datetime(2011, 02, 20)
+    S('a1:a3').date = datetime(2011, 2, 20)
 
     # Check if formats have been preserved
     # lfagundes's environment is pt_BR, so let's check either format
@@ -680,8 +680,8 @@ def test_user_selection():
 
 def test_format_as():
     S().sheet.getCellRangeByName('Sheet1.A1').NumberFormat = 38
-    S('a1').date = datetime(2011, 03, 1)
-    S('a2:3').date = datetime(2011, 03, 8)
+    S('a1').date = datetime(2011, 3, 1)
+    S('a2:3').date = datetime(2011, 3, 8)
 
     weekday = S('a1').string.split()[0] #probably "wednesday", but might be localized
     S('a2').format_as('a1')
