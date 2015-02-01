@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import sys, os, time
-from columns import name as col_name, index as col_index
+from . import columns
+col_name = columns.name
+col_index = columns.index
 
 if sys.platform == 'win32':
     #This is required in order to make pyuno usable with the default python interpreter under windows
