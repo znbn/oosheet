@@ -10,12 +10,16 @@ if sys.platform == 'win32':
     #Some environment variables must be modified
 
     #get the install path from registry
-    import _winreg
+    try:
+        import winreg
+    except:
+        import _winreg as winreg
+        
     # try with OpenOffice, LibreOffice on W7
     for _key in ['SOFTWARE\\OpenOffice.org\\UNO\\InstallPath',             # OpenOffice 3.3
                  'SOFTWARE\\Wow6432Node\\LibreOffice\\UNO\\InstallPath']:   # LibreOffice 3.4.5 on W7
         try:
-            value = _winreg.QueryValue(_winreg.HKEY_LOCAL_MACHINE, _key)
+            value = winreg.QueryValue(winreg.HKEY_LOCAL_MACHINE, _key)
         except Exception as detail:
             _errMess = "%s" % detail
         else:
@@ -198,18 +202,35 @@ class OODoc(object):
         self.dispatch('.uno:Redo')
 
     def _file_url(self, filename):
+        """
+        for examples:
+            '/D:/example.ods' tested in Windows absolute path
+            'example.ods' tested in Windows relative path (in current directory)
+        """
+        if filename.startswith('file://'):
+            filename = filename[7:]
+            
         if not filename.startswith('/'):
-            filename = os.path.join(os.environ['PWD'], filename)
+            #filename = os.path.join(os.environ['PWD'], filename)
+            filename = "/%s" % (os.path.join(os.path.abspath(os.curdir), filename).replace("\\",'/'))
 
         return 'file://%s' % filename
+
+    def save(self):   
+        """
+        Saves the current doc. Be sure it has already have a filename.
+        """
+        self.dispatch('Save')
         
-    def save_as(self, filename):
+    def save_as(self, filename, filtername = 'calc8'):
         """
         Saves the current doc to filename. Expects a string representing a path in filesystem.
         Path can be absolute or relative to PWD environment variable.
         """
-
-        self.dispatch('SaveAs', ('URL', self._file_url(filename)))
+        self.dispatch('SaveAs', 
+                      ('URL', self._file_url(filename)),
+                      ('FilterName', filtername)
+                     )
 
     def open(self, filename):
         """
@@ -1015,14 +1036,16 @@ def pack():
 def print_help():
     """Prints help message for pack()"""
     script_name = sys.argv[0].split('/')[-1]
-    print ("Usage: %s document script.py" % script_name)
+    print("Usage: %s document script.py" % script_name)
     sys.exit(1)
 
 def launch():
-    print ("""
+    print("""
 # This is just a reminder of the complicated command needed to launch 
 # LibreOffice with proper parameters to be controlled by sockets
 
-  libreoffice -calc -accept="socket,host=localhost,port=2002;urp;StarOffice.ServiceManager"
+  libreoffice --calc --nologo --norestore --accept="socket,host=localhost,port=2002;urp;StarOffice.ServiceManager"
+  libreoffice --calc --nologo --norestore --accept="socket,host=localhost,port=2002;urp;StarOffice.ServiceManager" --nodefault --headless
 """)
+
 
