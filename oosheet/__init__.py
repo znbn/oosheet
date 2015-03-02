@@ -201,13 +201,15 @@ class OODoc(object):
 
         return 'file://%s' % filename
         
-    def save_as(self, filename):
+    def save_as(self, filename, filtername = 'calc8'):
         """
         Saves the current doc to filename. Expects a string representing a path in filesystem.
         Path can be absolute or relative to PWD environment variable.
         """
-
-        self.dispatch('SaveAs', ('URL', self._file_url(filename)))
+        self.dispatch('SaveAs', 
+                      ('URL', self._file_url(filename)),
+                      ('FilterName', filtername)
+                     )
 
     def open(self, filename):
         """
